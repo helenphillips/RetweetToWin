@@ -1,15 +1,18 @@
-import twitter, os, time, sys, random
-from random import randint
+import os, time, sys, random
 
-import twitterlogon.py
+sys.path.append("/Users/Helen/PythonLibraries/python-twitter")
 
-LATESTFILE = 'dinosays_latest.txt'
-LOGFILE = 'dinosays_log.txt'
+import twitter
 
-os.chdir('/Users/Helen/twitter')
+os.chdir('/Users/Helen/twitter/RetweetToWin')
 
-# possible replies
-statuses = (' roarrrr!', ' RRROOOOAAAARRR!!!!', ' roar!', ' ROAR!',' RRRRRRRooooooaaaaaarrrr!!!!!', ' meow!', ' ROAR ROAR RRROOOOARRR!',' ROARRRR!')
+from twitterlogon import *
+
+LATESTFILE = 'rt2win_latest.txt'
+# LOGFILE = 'rt2win_log.txt'
+
+
+
 
 # grab the last ID that the bot replied to, so it doesn't reply to earlier posts. (spam prevention measure)
 if os.path.exists(LATESTFILE):
@@ -17,24 +20,13 @@ if os.path.exists(LATESTFILE):
     lastid = fp.read().strip()
     fp.close()
 
-    if lastid == '':
-        lastid = 0
+if lastid == '':
+    lastid = 0
 else:
     lastid = 0
 
-# read in the file of users we've already responded to
-fp = open(LOGFILE)
-alreadyMessaged = fp.readlines()
-fp.close()
-for i in range(len(alreadyMessaged)):
-    if alreadyMessaged[i].strip() == '':
-        continue
-
-    alreadyMessaged[i] = alreadyMessaged[i].split('|')[1]
-alreadyMessaged.append('DinosSayRoar') # don't reply to myself
-
 # perform the search
-results = api.GetSearch('dinosaurs', since_id=lastid)
+results = api.GetSearch('RT to win', since_id=lastid)
 print 'Found %s results.' % (len(results))
 if len(results) == 0:
     print 'Nothing to reply to. Quitting.'
@@ -49,10 +41,10 @@ for statusObj in results:
     statusObj.created_at = statusObj.created_at[:-11] + statusObj.created_at[25:]
     postTime = time.mktime(time.strptime(statusObj.created_at, '%a %b %d %H:%M:%S %Y'))
 
-    if time.time() - (24*60*60) < postTime and statusObj.user.screen_name not in alreadyMessaged and '@DinosSayRoar' not in statusObj.text.lower():
-        if [True for x in alreadyMessaged if ('@' + x).lower() in statusObj.text.lower()]:
-            print 'Skipping because it\'s a mention: @%s - %s' % (statusObj.user.screen_name.encode('ascii', 'replace'), statusObj.text.encode('ascii', 'replace'))
-            continue
+    if time.time() - (24*60*60) < postTime and statusObj.retweeted == False and '@_philpots' not in statusObj.text.lower():
+       # if [True for x in alreadyMessaged if ('@' + x).lower() in statusObj.text.lower()]:
+       #     print 'Skipping because it\'s a mention: @%s - %s' % (statusObj.user.screen_name.encode('ascii', 'replace'), statusObj.text.encode('ascii', 'replace'))
+       #     continue
 
         try:
             print 'Posting in reply to @%s: %s' % (statusObj.user.screen_name.encode('ascii', 'replace'), statusObj.text.encode('ascii', 'replace'))
@@ -65,9 +57,4 @@ for statusObj in results:
 
 fp = open(LATESTFILE, 'w')
 fp.write(str(max([x.id for x in results])))
-fp.close()
-
-fp = open(LOGFILE, 'a')
-fp.write('\n'.join(['%s|%s|%s' % (x[0], x[1], x[2]) for x in repliedTo]) + '\n')
-fp.write('\n')
 fp.close()
