@@ -8,7 +8,7 @@ os.chdir('/Users/Helen/twitter/RetweetToWin')
 
 from twitterlogon import *
 
-search_terms = ('RTtowin', 'WinitWednesdays','competition','giveaway')
+search_terms = ('RTtowin', 'WinitWednesdays','freebiefriday','giveaway', 'RT+Follow', 'follow & RT', 'FLW & RT')
 # perform the search
 for term in search_terms: 
     print 'Searching for %s' % term
