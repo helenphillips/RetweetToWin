@@ -10,9 +10,24 @@ from twitterlogon import *
 
 search_terms = ('RTtowin', 'WinitWednesdays','freebiefriday','giveaway', 'RT+Follow', 'follow & RT', 'FLW & RT')
 # perform the search
+
+# grab the last ID that the bot replied to, so it doesn't reply to earlier posts. (spam prevention measure)
+LATESTFILE = 'rt2win_latest.txt'
+
+if os.path.exists(LATESTFILE):
+    fp = open(LATESTFILE)
+    lastid = fp.read().strip()
+    fp.close()
+
+    if lastid == '':
+        lastid = 0
+else:
+    lastid = 0
+
+
 for term in search_terms: 
     print 'Searching for %s' % term
-    results = api.GetSearch(term, count=20)
+    results = api.GetSearch(term, count=20, since_id=lastid)
     print 'Found %s results.' % (len(results))
 
     for statusObj in results:
