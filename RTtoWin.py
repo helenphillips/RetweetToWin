@@ -25,8 +25,19 @@ else:
     lastid = 0
 
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
 for term in search_terms: 
-    print 'Searching for %s' % term
+    print bcolors.OKBLUE + 'Searching for %s' % term + bcolors.ENDC
     results = api.GetSearch(term, count=20, since_id=lastid)
     print 'Found %s results.' % (len(results))
 
@@ -36,20 +47,20 @@ for term in search_terms:
         fp.close()
 
     for statusObj in results:
-        print statusObj.retweet_count
+        # print statusObj.retweet_count
         if statusObj.retweet_count > 4 and '@_philpots' not in statusObj.text.lower() and '@_philpots' not in statusObj.user.screen_name:
             try:
-                print 'Retweeting @%s: %s' % (statusObj.user.screen_name.encode('ascii', 'replace'), statusObj.text.encode('ascii', 'replace'))
+                print bcolors.OKGREEN + 'Retweeting @%s: %s' % (statusObj.user.screen_name.encode('ascii', 'replace'), statusObj.text.encode('ascii', 'replace')) + bcolors.ENDC
                 rt_id = statusObj.id
                 api.PostRetweet(original_id = rt_id) 
 
-                print 'Following @%s' % (statusObj.user.screen_name.encode('ascii', 'replace'))
+                print bcolors.OKGREEN + 'Following @%s' % (statusObj.user.screen_name.encode('ascii', 'replace'))  + bcolors.ENDC
                 user = statusObj.user.screen_name.encode('ascii', 'replace')
                 api.CreateFriendship(statusObj.user.id)
 
                 if len(statusObj.user_mentions) > 0:
                     for mentions in statusObj.user_mentions:
-                        print 'Also following @%s' % (mentions.name)
+                        print bcolors.OKGREEN + 'Also following @%s'  % (mentions.name) + bcolors.ENDC
                         api.CreateFriendship(mentions.id)
 
                 time.sleep(1)
