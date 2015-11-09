@@ -49,3 +49,8 @@ for term in search_terms:
                 time.sleep(1)
             except Exception:
                 print "Unexpected error:", sys.exc_info()[0:2]
+
+
+    fp = open(LATESTFILE, 'w')
+    fp.write(str(max([x.id for x in results])))
+    fp.close()
