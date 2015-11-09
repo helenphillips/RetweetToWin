@@ -30,6 +30,11 @@ for term in search_terms:
     results = api.GetSearch(term, count=20, since_id=lastid)
     print 'Found %s results.' % (len(results))
 
+    if len(results) > 0:
+        fp = open(LATESTFILE, 'w')
+        fp.write(str(max([x.id for x in results])))
+        fp.close()
+
     for statusObj in results:
         if statusObj.text[0:2] != "RT" and statusObj.retweeted == False and '@_philpots' not in statusObj.text.lower() and '@_philpots' not in statusObj.user.screen_name:
             try:
@@ -51,6 +56,4 @@ for term in search_terms:
                 print "Unexpected error:", sys.exc_info()[0:2]
 
 
-    fp = open(LATESTFILE, 'w')
-    fp.write(str(max([x.id for x in results])))
-    fp.close()
+    
