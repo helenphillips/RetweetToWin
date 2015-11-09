@@ -36,7 +36,8 @@ for term in search_terms:
         fp.close()
 
     for statusObj in results:
-        if statusObj.text[0:2] != "RT" and statusObj.retweeted == False and '@_philpots' not in statusObj.text.lower() and '@_philpots' not in statusObj.user.screen_name:
+        print statusObj.retweet_count
+        if statusObj.retweet_count > 4 and '@_philpots' not in statusObj.text.lower() and '@_philpots' not in statusObj.user.screen_name:
             try:
                 print 'Retweeting @%s: %s' % (statusObj.user.screen_name.encode('ascii', 'replace'), statusObj.text.encode('ascii', 'replace'))
                 rt_id = statusObj.id
