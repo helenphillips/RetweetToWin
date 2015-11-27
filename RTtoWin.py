@@ -1,10 +1,14 @@
 import os, time, sys, random
 
-sys.path.append("/Users/Helen/PythonLibraries/python-twitter")
+if os.uname()[1] == "Helen-Phillipss-MacBook-Pro.local":
+    sys.path.append("/Users/Helen/PythonLibraries/python-twitter")
+    import twitter
+    os.chdir('/Users/Helen/twitter/RetweetToWin')
 
-import twitter
-
-os.chdir('/Users/Helen/twitter/RetweetToWin')
+if os.uname()[1] == "raspberrypi":
+    sys.path.append("/home/pi/PythonLibraries/python-twitter")
+    import twitter
+    os.chdir('/home/pi//RetweetToWin')
 
 from twitterlogon import *
 
