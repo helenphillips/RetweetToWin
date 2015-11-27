@@ -9,6 +9,8 @@ if os.uname()[1] == "raspberrypi":
     sys.path.append("/home/pi/PythonLibraries/python-twitter")
     import twitter
     os.chdir('/home/pi//RetweetToWin')
+    import urllib3
+    urllib3.disable_warnings()
 
 from twitterlogon import *
 
