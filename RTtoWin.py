@@ -14,7 +14,7 @@ if os.uname()[1] == "raspberrypi":
 
 from twitterlogon import *
 
-search_terms = ('RTtowin', 'WinitWednesdays','freebiefriday','giveaway', 'RT+Follow', 'follow & RT', 'FLW & RT')
+search_terms = ('RTtowin', 'WinitWednesdays','freebiefriday','giveaway', 'RT+Follow', 'follow & RT')
 # perform the search
 
 # grab the last ID that the bot replied to, so it doesn't reply to earlier posts. (spam prevention measure)
@@ -54,7 +54,7 @@ for term in search_terms:
 
     for statusObj in results:
         # print statusObj.retweet_count
-        if statusObj.retweet_count > 4 and '@_philpots' not in statusObj.text.lower() and '@_philpots' not in statusObj.user.screen_name:
+        if statusObj.retweet_count > 10 and '@_philpots' not in statusObj.text.lower() and '@_philpots' not in statusObj.user.screen_name and 'followback' not in statusObj.text.lower():
             try:
                 print bcolors.OKGREEN + 'Retweeting @%s: %s' % (statusObj.user.screen_name.encode('ascii', 'replace'), statusObj.text.encode('ascii', 'replace')) + bcolors.ENDC
                 rt_id = statusObj.id
